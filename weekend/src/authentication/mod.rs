@@ -1,30 +1,35 @@
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use std::{
-    borrow::Cow,
-    collections::HashMap,
-    fmt::Debug,
-    ops::Deref,
-    sync::{Arc, Mutex},
-};
+use std::{fmt::Debug, ops::Deref};
+mod builder;
+mod challenge;
+mod forbid;
+mod sign_in;
+mod sign_out;
+
+// use builder::{AuthenticationBuilder, SignInBuilder};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct State {
     redirect_url: String,
 }
 
+/*
+    TODO
+    * Make error generic so we can compose errror together
+    * Provide a simplified api to implement `Authentication`
+*/
+
 #[async_trait]
-pub trait Handler<Payload, State> {
+pub trait Authentication<State, Payload>
+where
+    State: Deref<Target = self::State>,
+{
     type Error;
 
     /// The name of the authentication handler
     /// This is used to identify the handler in logs and other contexts
     const NAME: &'static str;
-
-    /// This default to `Self::NAME` used for persisting state in global context
-    fn get_name(&self) -> &'static str {
-        Self::NAME
-    }
 
     /// Authenticate the current request
     ///
@@ -53,7 +58,7 @@ pub trait Handler<Payload, State> {
     ///
     /// # Arguments
     /// `state` - The current state of the request `Self::State`
-    /// `payload` - The payload to be used for signing in `Self::Payload`
+    /// `payload` - The payload to be used for signing in `Payload`
     async fn sign_in(&self, state: &State, payload: &Payload) -> Result<(), Self::Error>;
 
     /// Sign out in the current request
@@ -62,32 +67,8 @@ pub trait Handler<Payload, State> {
     ///
     /// # Arguments
     /// `state` - The current state of the request `Self::State`
-    /// `payload` - The payload to be used for signing in `Self::Payload`
+    /// `payload` - The payload to be used for signing in `Payload`
     async fn sign_out(&self, state: &State, payload: &Payload) -> Result<(), Self::Error>;
-}
-
-pub trait Context {}
-
-pub trait HandlerProvider {}
-
-/// Authentication Service
-///
-/// This is the main entry point for the authentication service that will be used to authenticate the current request   
-///
-/// # Example
-///
-#[derive(Clone)]
-pub struct Authentication<H> {
-    context: Arc<Mutex<Vec<Box<dyn Context>>>>,
-    handler: H,
-}
-
-pub struct AuthenticationBuilder {}
-
-impl<H> Authentication<H> {
-    fn build() -> AuthenticationBuilder {
-        todo!()
-    }
 }
 
 #[cfg(test)]

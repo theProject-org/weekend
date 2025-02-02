@@ -1,11 +1,14 @@
 [workspace]
 members = [
-  #  core crates for weekend-rs authentication and authorization
-  "security",
-  
+  # core crates for weekend-rs authentication and authorization
+  "weekend",
+
+  # authentication handler
+  "handler",
+
   # iam crates 
-  "iam", 
-  
+  "iam",
+
   # adapter crates - these are set of libraries that allow weekend-rs to work with external resources or framework's
   "adapters",
   "adapters/actix",
@@ -13,12 +16,10 @@ members = [
   "adapters/mysql",
   "adapters/postgres",
 ]
-
-
 resolver = "2"
 
 [workspace.dependencies]
 anyhow = "1.0.87"
 async-trait = "0.1.83"
 serde = "1.0.215"
-plus = { git = "https://github.com/theProjectNG/plus.git", rev = "e23ce82ecef33ba857e29d1e82ddd2fe9069d762" }
+plus-rs = { git = "https://github.com/ws-gith/plus.git", rev = "462ad8feabc57a4cfeded89c7544ee8b4eaee858" }

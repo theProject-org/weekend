@@ -1,0 +1,20 @@
+[package]
+name = "handler"
+version = "0.1.0"
+edition = "2021"
+
+
+[features]
+default = ["bearer"]
+jwt = []
+oauth = []
+cookie = []
+bearer = []
+
+# dependencies features
+
+
+[dependencies]
+plus-rs = { workspace = true, features = ["std-rs", "axum"] }
+serde = { workspace = true, features = ["derive"] }
+async-trait = { workspace = true }
