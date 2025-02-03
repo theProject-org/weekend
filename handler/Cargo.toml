@@ -1,7 +1,13 @@
 [package]
 name = "handler"
-version = "0.1.0"
-edition = "2021"
+# TODO -> Add documentation url later
+# documentation = ""
+description = "Authentication handler"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
 
 
 [features]
@@ -18,3 +24,7 @@ bearer = []
 plus-rs = { workspace = true, features = ["std-rs", "axum"] }
 serde = { workspace = true, features = ["derive"] }
 async-trait = { workspace = true }
+
+
+[lints]
+workspace = true
